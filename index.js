@@ -34,7 +34,7 @@ app.post('/upload', upload.single('file'), function (req, res, next) {
 	  msg = req.body.msg;
 	  obj = JSON.parse(data);
 	  console.log(req.file.filename + ' - ' + msg);
-	  obj.push({title:msg, image:'http://'+BASE_PATH+':'+BASE_PORT+"/imagens/"+req.file.filename});
+	  obj.push({title:msg, image:'http://'+BASE_PATH+':'+BASE_PORT+"/imagens/"+req.file.filename, rating:8.2,releaseYear:2010,genre:["Animation","Adventure","Family"]});
 		console.log(obj);
 		fs.writeFile('movies.json', JSON.stringify(obj), function (err) {
 		  if (err) throw err;
