@@ -22,11 +22,11 @@ app.get('/', function (req, res) {
 	}});
 });
 
-app.get('/upload', function (req, res){
+app.get('/enviar', function (req, res){
     res.render('upload');
 });
 
-app.post('/upload', upload.single('file'), function (req, res, next) {
+app.post('/enviar', upload.single('file'), function (req, res, next) {
 	
 	var obj, msg;
 	fs.readFile('movies.json', 'utf8', function (err, data) {
@@ -43,6 +43,19 @@ app.post('/upload', upload.single('file'), function (req, res, next) {
 	  });
   res.end('uploaded');
 })
+
+app.get('/excluir/:id', function (req, res){
+    fs.readFile('movies.json', 'utf8', function (err, data) {
+	  if (err) throw err;
+	  obj = JSON.parse(data);
+	  obj.splice(req.params.id, 1);
+		fs.writeFile('movies.json', JSON.stringify(obj), function (err) {
+		  if (err) throw err;
+		  console.log('It\'s saved!');
+		});
+	  });
+	  res.end('Excluído!');
+});
 
 var server = app.listen(app.get('port') ,app.get('ip'), function () {
   var host = server.address().address;
