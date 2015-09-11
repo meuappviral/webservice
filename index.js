@@ -34,7 +34,7 @@ app.post('/enviar', upload.single('file'), function (req, res, next) {
 	  msg = req.body.msg;
 	  obj = JSON.parse(data);
 	  console.log(req.file.filename + ' - ' + msg);
-	  obj.push({title:msg, image:'http://'+BASE_PATH+':'+BASE_PORT+"/imagens/"+req.file.filename, rating:8.2,releaseYear:2010,genre:["Animation","Adventure","Family"]});
+	  obj.lista.push({id:obj.indice++, title:msg, image:'http://'+BASE_PATH+':'+BASE_PORT+"/imagens/"+req.file.filename, rating:8.2,releaseYear:2010,genre:["Animation","Adventure","Family"]});
 		console.log(obj);
 		fs.writeFile('movies.json', JSON.stringify(obj), function (err) {
 		  if (err) throw err;
@@ -48,7 +48,14 @@ app.get('/excluir/:id', function (req, res){
     fs.readFile('movies.json', 'utf8', function (err, data) {
 	  if (err) throw err;
 	  obj = JSON.parse(data);
-	  obj.splice(req.params.id, 1);
+	  
+	  obj.lista.forEach(function(val, i){
+		  if(val.id == req.params.id) {
+			obj.lista.splice(i, 1);
+			return;
+		  }  
+	  });
+	  
 		fs.writeFile('movies.json', JSON.stringify(obj), function (err) {
 		  if (err) throw err;
 		  console.log('It\'s saved!');
