@@ -17,9 +17,8 @@ app.use('/imagens', express.static(__dirname + '/imagens'));
 
 app.get('/', function (req, res) {
 	res.type('application/json');
-	res.sendFile(path.join(__dirname + '/movies.json'), {headers: {
-        'Content-Type': 'Application/json'
-	}});
+	var obj = JSON.parse(fs.readFileSync('movies.json', 'utf8'));
+	res.end(JSON.stringify(obj.lista));
 });
 
 app.get('/enviar', function (req, res){
