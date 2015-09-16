@@ -18,8 +18,33 @@ app.use('/imagens', express.static(__dirname + '/imagens'));
 app.get('/listar/:idReferencia?/:quantidade?', function (req, res) {
 	res.type('application/json');
 	var obj = JSON.parse(fs.readFileSync('movies.json', 'utf8'));
-	res.end(JSON.stringify(obj.lista.reverse()));
+	var lista = obj.lista.reverse();
+	
+	if(req.params.idReferencia) {
+		var quantidade = req.params.quantidade ? parseInt(req.params.quantidade) : 50;
+		quantidade *= -1;
+		var posicaoInicial = findPosition(lista, req.params.idReferencia);
+		var posicaoFinal = posicaoInicial + quantidade;
+			
+		if(posicaoFinal < posicaoInicial) {
+			var tmp = posicaoInicial;
+			posicaoInicial = posicaoFinal;
+			posicaoFinal = tmp;
+		}
+		lista = lista.slice(posicaoInicial, posicaoFinal);
+	}
+	
+	res.end(JSON.stringify(lista));
 });
+
+function findPosition(lista, id) {
+	var indice = -1;
+	lista.forEach(function(val, i) {
+		if(val.id == id)
+			return indice = i;
+	});
+	return indice;
+}
 
 app.get('/enviar', function (req, res){
     res.render('upload');
