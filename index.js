@@ -15,10 +15,10 @@ app.set('view engine', 'ejs');
 express.static.mime.default_type = "image/jpeg";
 app.use('/imagens', express.static(__dirname + '/imagens'));
 
-app.get('/', function (req, res) {
+app.get('/listar/:idReferencia?/:quantidade?', function (req, res) {
 	res.type('application/json');
 	var obj = JSON.parse(fs.readFileSync('movies.json', 'utf8'));
-	res.end(JSON.stringify(obj.lista));
+	res.end(JSON.stringify(obj.lista.reverse()));
 });
 
 app.get('/enviar', function (req, res){
